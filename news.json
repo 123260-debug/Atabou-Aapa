@@ -1,0 +1,22 @@
+{
+  "news": [
+    {
+      "id": "1",
+      "date": "2026-10-15",
+      "tag": "NEWS",
+      "title": "公式サイトをオープンしました",
+      "titleEn": "The official site is now open",
+      "body": "「あたぼうパパ」の公式サイトをオープンしました。動画やお知らせを、ここから発信していきます。",
+      "bodyEn": "The official site of \"Atabou Papa\" is now open. We will share videos and updates from here."
+    },
+    {
+      "id": "2",
+      "date": "2026-10-15",
+      "tag": "INFO",
+      "title": "新チャンネル「あたぼうチャンネル」のご案内",
+      "titleEn": "About our new channel \"Atabou Channel\"",
+      "body": "15歳になったあたぼうが立ち上げた新チャンネル「あたぼうチャンネル」を、CHANNELSからご覧いただけます。",
+      "bodyEn": "Atabou, now 15, has started a new channel, \"Atabou Channel\". You can find it in the Channels section."
+    }
+  ]
+}

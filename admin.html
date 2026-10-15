@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#000000">
+<title>管理ページ | あたぼうパパ</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f4f4;--card:#fff;--fg:#111;--mu:#666;--ln:#dcdcdc;--a1:#ff3b30;--a2:#ff9f0a;--ok:#1f9d55;--ng:#d33;--en:'Inter',Arial,sans-serif;--jp:'Noto Sans JP','Hiragino Sans','Yu Gothic',sans-serif;color-scheme:light;box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--jp);line-height:1.85;font-size:15px;padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
+header{background:#000;color:#fff;padding:calc(env(safe-area-inset-top,0px) + 14px) clamp(14px,4vw,36px) 12px;position:sticky;top:0;z-index:20}
+.hr{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+header b{font-family:var(--en);letter-spacing:.3em;font-size:13px}
+.bd{display:flex;gap:8px;flex-wrap:wrap}.bd span{font-size:11px;padding:3px 12px;border-radius:99px;background:#333;color:#ddd}
+.bd .ok{background:var(--ok);color:#fff}.bd .ng{background:var(--ng);color:#fff}.bd .wr{background:var(--a2);color:#000}
+.tabs{display:flex;gap:4px;margin-top:12px;overflow-x:auto}
+.tabs button{flex:1;min-width:96px;background:#1c1c1c;color:#bbb;border:0;padding:11px 8px;font:700 13px var(--jp);cursor:pointer;border-radius:8px 8px 0 0}
+.tabs button.on{background:var(--bg);color:#000}
+main{max-width:900px;margin:0 auto;padding:26px clamp(14px,4vw,36px)}
+.pg{display:none}.pg.on{display:block}
+h2{font-size:20px;margin:6px 0 14px}h3{font-size:16px;margin:0 0 8px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:20px;margin-bottom:16px}
+.card p,.card li{color:#333}.mu{color:var(--mu);font-size:13px}
+.step{display:grid;grid-template-columns:38px 1fr;gap:14px}
+.step>b{width:38px;height:38px;border-radius:50%;background:linear-gradient(120deg,var(--a1),var(--a2));color:#fff;display:grid;place-items:center;font-family:var(--en)}
+.step ol,.step ul{padding-left:20px;margin:8px 0}.step li{margin:4px 0}
+code{background:#eee;padding:1px 7px;border-radius:5px;font-size:13px;word-break:break-all}
+.note{background:#fff7e6;border:1px solid #ffd591;border-radius:10px;padding:12px 14px;font-size:13px;margin-top:10px}
+label{display:block;font-size:12px;color:var(--mu);margin:14px 0 4px;font-weight:700}
+input,select,textarea{width:100%;padding:12px 14px;border:1px solid var(--ln);background:#fff;color:var(--fg);font:inherit;border-radius:10px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--a2);border-color:transparent}
+textarea{min-height:140px;resize:vertical}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button.b{font:700 14px var(--jp);padding:12px 22px;border:0;border-radius:99px;background:linear-gradient(120deg,var(--a1),var(--a2));color:#fff;cursor:pointer;margin:14px 8px 0 0}
+button.b.o{background:#fff;color:#111;border:1px solid #bbb}button.b.s{padding:7px 14px;font-size:12px;margin:0 0 0 6px}
+button.b:disabled{opacity:.5}
+.row{display:grid;grid-template-columns:96px 1fr auto;gap:12px;align-items:center;padding:14px 0;border-top:1px solid var(--ln)}
+.row:first-child{border-top:0}.row small{font-family:var(--en);color:var(--mu)}
+.tg{display:inline-block;font-family:var(--en);font-size:10px;border:1px solid #999;padding:0 8px;margin-right:8px;border-radius:4px;letter-spacing:.1em}
+.pv{border:1px dashed #bbb;border-radius:10px;padding:14px;margin-top:14px;background:#fafafa}
+.pv .d{font-family:var(--en);font-size:13px;margin-right:12px}.pv p{margin-top:8px;color:var(--mu);white-space:pre-wrap}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--ln);padding:10px clamp(14px,4vw,36px) calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:12px;align-items:center;justify-content:space-between;z-index:20}
+.bar .b{margin:0}#msg{font-size:13px;color:var(--mu);flex:1}#msg.ok{color:var(--ok)}#msg.ng{color:var(--ng)}
+details{margin:8px 0;border:1px solid var(--ln);border-radius:10px;padding:0 14px;background:#fff}summary{cursor:pointer;padding:12px 0;font-weight:700}details p{padding-bottom:12px}
+@media(max-width:600px){.g2{grid-template-columns:1fr}.row{grid-template-columns:1fr;gap:4px}.row>div:last-child{display:flex;margin-top:6px}.bar{flex-wrap:wrap}.step{grid-template-columns:30px 1fr;gap:10px}.step>b{width:30px;height:30px;font-size:13px}}
+.bx2{border:1px solid var(--ln);border-radius:10px;padding:12px;margin:10px 0;background:#fafafa}.bx2 textarea{min-height:90px}
+</style>
+</head>
+<body>
+<header>
+  <div class="hr"><b>ATABOU PAPA ADMIN</b><div class="bd"><span id="b1">未接続</span><span id="b2" style="display:none">未公開の変更あり</span></div></div>
+  <div class="tabs"><button data-t="guide" class="on">① 使い方</button><button data-t="set">② 接続設定</button><button data-t="news">③ 記事を書く</button><button data-t="yt">④ YouTube連動</button><button data-t="bio">⑤ BIO</button></div>
+</header>
+<main>
+
+<div class="pg on" id="p-guide">
+  <h2>はじめての方へ(最初の1回だけ)</h2>
+  <p class="mu" style="margin-bottom:14px">全部で4つのステップです。いちばん上から順番に進めてください。2回目からは、「③ お知らせ」だけ使います。</p>
+
+  <div class="card step"><b>1</b><div><h3>GitHubにサイトのファイルを置く</h3>
+    <ol><li><code>github.com</code> にログインします(アカウントがなければ無料で作ります)</li>
+    <li>右上の「+」→「New repository」を押します</li>
+    <li>名前に <code>atabou-papa</code> のような半角英数字を入れ、「Public」を選んで「Create repository」を押します</li>
+    <li>出てきた画面の「uploading an existing file」を押し、次の4つのファイルをまとめてドラッグします:<br><code>index.html</code> <code>admin.html</code> <code>news.json</code> <code>config.json</code></li>
+    <li>画面の下の「Commit changes」を押します</li></ol></div></div>
+
+  <div class="card step"><b>2</b><div><h3>サイトを公開する(GitHub Pages)</h3>
+    <ol><li>リポジトリの「Settings」→ 左の「Pages」を開きます</li>
+    <li>「Source」を「Deploy from a branch」、「Branch」を「main」、フォルダを「/(root)」にして「Save」を押します</li>
+    <li>1〜3分待って、ページを更新します。画面に「Your site is live at …」と出れば完成です</li></ol>
+    <p class="mu">サイトのアドレスは <code>https://ユーザー名.github.io/リポジトリ名/</code>、この管理ページは、その後ろに <code>admin.html</code> を付けたアドレスです。</p></div></div>
+
+  <div class="card step"><b>3</b><div><h3>「鍵」(アクセストークン)を作る</h3>
+    <p>この管理ページが、あなたの代わりにGitHubのファイルを書き換えるための「鍵」です。</p>
+    <ol><li>GitHubの右上のアイコン → 「Settings」→ いちばん下の「Developer settings」</li>
+    <li>「Personal access tokens」→「Fine-grained tokens」→「Generate new token」</li>
+    <li>名前は何でもOK(例: admin)。期限は「90 days」などを選びます</li>
+    <li>「Repository access」で「Only select repositories」を選び、サイトのリポジトリだけを選びます</li>
+    <li>「Permissions」→「Repository permissions」→「Contents」を「Read and write」にします</li>
+    <li>「Generate token」を押し、表示された <code>github_pat_…</code> をコピーします(この画面を閉じると二度と見られません)</li></ol>
+    <div class="note">鍵は他の人に見せないでください。期限が切れたら、同じ手順で作り直すだけです。</div></div></div>
+
+  <div class="card step"><b>4</b><div><h3>この管理ページに接続する</h3>
+    <ol><li>上の「② 接続設定」を開きます</li>
+    <li>ユーザー名、リポジトリ名、コピーした鍵を入れて「接続テスト」を押します</li>
+    <li>上のバッジが緑の「接続OK」になれば成功です</li></ol></div></div>
+
+  <h2 style="margin-top:26px">お知らせの出し方(いつもの操作)</h2>
+  <div class="card step"><b>▶</b><div>
+    <ol><li>「③ 記事を書く」を開き、日付・種類・タイトル・本文を書いて「追加する」を押します。英語と写真は、入れなくてもかまいません(英語を空にすると、英語表示でも日本語が出ます)</li>
+    <li>下の「プレビュー」で、サイトでの見え方を確認します</li>
+    <li>画面の下の「公開する」を押します。1〜3分で、サイトのNEWSに出ます</li></ol>
+    <p class="mu">直したいときは一覧の「編集」、消したいときは「削除」のあと、必ず「公開する」を押してください(押すまでサイトは変わりません)。</p><p class="mu">サイトのお知らせをタップすると、その記事のページが開きます。一覧の「記事を開く」で、公開後の記事ページを確認できます。記事のアドレスは「サイトのアドレス#news/番号」です。</p><p class="mu">プロフィール(BIO)の文章や年表を変えたいときは、「⑤ BIO」で編集して「BIOを保存して公開する」を押します。</p></div></div>
+
+  <h2 style="margin-top:26px">困ったとき</h2>
+  <details><summary>「読み込めませんでした: HTTP 401」と出る</summary><p>鍵が間違っているか、期限切れです。手順3をやり直して、新しい鍵を貼り付けてください。</p></details>
+  <details><summary>「HTTP 403」「HTTP 404」と出る</summary><p>鍵の権限が足りない、または対象のリポジトリが選ばれていません。手順3の「Repository access」と「Contents: Read and write」を確認してください。ユーザー名やリポジトリ名のつづり違いもよくある原因です。</p></details>
+  <details><summary>公開したのにサイトに出ない</summary><p>反映まで1〜3分かかります。時間をおいて、ブラウザを再読み込み(スマホは更新)してください。</p></details>
+  <details><summary>「公開できませんでした: … does not match」と出る</summary><p>他の場所でも更新した場合に起きます。「② 接続設定」で「接続テスト」を押して最新の内容を読み込み直し、もう一度お知らせを直して公開してください。</p></details>
+  <details><summary>写真が入らない</summary><p>先に「② 接続設定」で接続テストを成功させてください。写真は自動で小さく整えられ、GitHubの images/news フォルダに保存されます。記事を「公開する」まで、サイトには出ません。</p></details>
+  <details><summary>英語表示にするには?</summary><p>サイトの右上の「EN」を押すと、英語に切り替わります。記事に英語のタイトルと本文を入れておくと、記事も英語で表示されます。</p></details>
+  <details><summary>鍵はどこに保存される?</summary><p>このブラウザの中だけです。サーバーには送られません。共用のパソコンでは、使い終わったら「② 接続設定」の「設定を消去」を押してください。</p></details>
+</div>
+
+<div class="pg" id="p-set">
+  <h2>GitHubとの接続</h2>
+  <div class="card">
+    <div class="g2"><div><label>GitHubのユーザー名</label><input id="u" autocomplete="off" placeholder="例: your-name"></div>
+    <div><label>リポジトリ名</label><input id="r" autocomplete="off" placeholder="例: atabou-papa"></div>
+    <div><label>ブランチ(ふつうは main)</label><input id="b" value="main"></div>
+    <div><label>お知らせのファイル名</label><input id="p" value="news.json"></div></div>
+    <label>鍵(アクセストークン)</label><input id="t" type="password" autocomplete="off" placeholder="github_pat_...">
+    <button class="b" id="test">接続テスト</button><button class="b o" id="clr">設定を消去</button>
+    <p class="mu" style="margin-top:12px">入れた内容は、このブラウザの中にだけ保存されます。作り方は「① 使い方」のステップ3です。</p>
+  </div>
+</div>
+
+<div class="pg" id="p-news">
+  <h2>記事を書く</h2>
+  <div class="card">
+    <div class="g2"><div><label>日付</label><input id="d" type="date"></div>
+    <div><label>種類</label><select id="g"><option>NEWS</option><option>INFO</option><option>VIDEO</option><option>MEDIA</option></select></div></div>
+    <label>タイトル(日本語)</label><input id="ti" placeholder="例: 新しい動画を公開しました">
+    <label>タイトル(英語・なくてもOK)</label><input id="te" placeholder="例: A new video is out">
+    <label>本文(日本語)— 空行を入れると段落が分かれます</label><textarea id="bo" placeholder="例: 〇〇の動画を公開しました。ぜひご覧ください。"></textarea>
+    <label>本文(英語・なくてもOK)</label><textarea id="bo2" style="min-height:100px" placeholder="英語を書かない場合は、英語表示でも日本語が表示されます"></textarea>
+    <label>写真(1枚・なくてもOK)</label><input id="im" type="file" accept="image/*"><div id="ipv"></div>
+    <div class="pv" id="pv"><span class="mu">ここに、サイトでの見え方が出ます</span></div>
+    <button class="b" id="add">追加する</button><button class="b o" id="cancel" style="display:none">編集をやめる</button>
+  </div>
+  <h2 style="margin-top:24px">お知らせの一覧</h2>
+  <div class="card" id="list"></div>
+</div>
+
+<div class="pg" id="p-yt">
+  <h2>YouTubeの登録者数を自動で連動させる</h2>
+  <div class="card">
+    <p>サイトの登録者数・動画数・再生数を、YouTubeと自動でそろえる設定です。無料のAPIキーが必要です。</p>
+    <h3 style="margin-top:14px">APIキーの作り方</h3>
+    <ol style="padding-left:20px">
+      <li><code>console.cloud.google.com</code> にGoogleアカウントでログインし、上のプロジェクト選択から「新しいプロジェクト」を作ります</li>
+      <li>左のメニュー「APIとサービス」→「ライブラリ」で <code>YouTube Data API v3</code> を検索し、「有効にする」を押します</li>
+      <li>「APIとサービス」→「認証情報」→「認証情報を作成」→「APIキー」を押します</li>
+      <li>作られたキーの「キーを制限」を開き、「ウェブサイトの制限」にサイトのアドレス(例: <code>https://ユーザー名.github.io/*</code>)を入れて保存します。「API の制限」では YouTube Data API v3 だけを選びます</li>
+      <li>キーをコピーして、下の欄に貼り付けます</li>
+    </ol>
+    <label>APIキー</label><input id="k" autocomplete="off" placeholder="AIza...">
+    <div class="g2"><div><label>あたぼうパパのハンドル</label><input id="h1" value="@あたぼうパパ"></div><div><label>あたぼうチャンネルのハンドル</label><input id="h2" value="@あたぼう-r5y"></div></div>
+    <button class="b" id="savey">保存して公開する</button>
+    <div class="note">APIキーはサイトのファイル(config.json)に書かれ、見る人にも見える形になります。そのため、手順4の「ウェブサイトの制限」を必ず設定してください。設定しておけば、他のサイトで使われることはありません。</div>
+  </div>
+</div>
+<div class="pg" id="p-bio">
+  <h2>プロフィール(BIO)を編集する</h2>
+  <p class="mu" style="margin-bottom:12px">サイトの「BIO」の文章と年表を、ここで書き換えられます。英語は、なくてもかまいません(空のときは、英語表示でも日本語が出ます)。</p>
+  <div class="card"><h3>紹介文</h3><p class="mu">1つの欄が、1つの段落になります。</p><div id="bi-list"></div><button class="b o" id="bi-add">段落を足す</button></div>
+  <div class="card"><h3>年表(これまで)</h3><p class="mu">「見出し」には、年や年齢(例: 2015.11.23 / AGE 6)を入れます。</p><div id="tl-list"></div><button class="b o" id="tl-add">行を足す</button></div>
+  <button class="b" id="bio-save">BIOを保存して公開する</button>
+</div>
+</main>
+
+<div class="bar"><span id="msg">「① 使い方」から順に進めてください</span><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="b o" id="site">サイトを開く</button><button class="b o" id="dl">news.jsonを保存</button><button class="b" id="pub">公開する</button></div></div>
+
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+var S={items:[],sha:null,edit:-1,dirty:false,ok:false,cfgSha:null};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function say(m,c){var e=$('#msg');e.textContent=m;e.className=c||''}
+function badge(){var b=$('#b1');b.textContent=S.ok?'接続OK':'未接続';b.className=S.ok?'ok':'';$('#b2').style.display=S.dirty?'inline':'none';$('#b2').className='wr'}
+function dirty(v){S.dirty=v;badge()}
+function lsGet(){try{return JSON.parse(localStorage.getItem('ap_admin')||'{}')}catch(e){return{}}}
+function lsSet(o){try{localStorage.setItem('ap_admin',JSON.stringify(o))}catch(e){}}
+var c0=lsGet();['u','r','b','p','t'].forEach(function(k){if(c0[k])$('#'+k).value=c0[k]});
+function cfg(){return{u:$('#u').value.trim(),r:$('#r').value.trim(),b:$('#b').value.trim()||'main',p:$('#p').value.trim()||'news.json',t:$('#t').value.trim()}}
+function need(c){if(!c.u||!c.r||!c.t){go('set');say('ユーザー名・リポジトリ名・鍵を入れてください','ng');return false}return true}
+function api(c,p){return'https://api.github.com/repos/'+encodeURIComponent(c.u)+'/'+encodeURIComponent(c.r)+'/contents/'+p.split('/').map(encodeURIComponent).join('/')}
+function hd(c){return{'Authorization':'Bearer '+c.t,'Accept':'application/vnd.github+json'}}
+function b64e(s){return btoa(unescape(encodeURIComponent(s)))}
+function b64d(s){return decodeURIComponent(escape(atob(s.replace(/\s/g,''))))}
+function ghGet(c,p){return fetch(api(c,p)+'?ref='+encodeURIComponent(c.b)+'&t='+Date.now(),{headers:hd(c)}).then(function(r){
+  if(r.status===404)return{missing:true};
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json().then(function(j){return{data:JSON.parse(b64d(j.content)),sha:j.sha}})})}
+function ghPut(c,p,obj,sha,msg){var body={message:msg,content:b64e(JSON.stringify(obj,null,2)+'\n'),branch:c.b};if(sha)body.sha=sha;
+  return fetch(api(c,p),{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},hd(c)),body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.message||('HTTP '+r.status));return j.content.sha})})}
+function today(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+$('#d').value=today();
+/* tabs */
+function go(t){[].forEach.call(document.querySelectorAll('.tabs button'),function(b){b.classList.toggle('on',b.dataset.t===t)});[].forEach.call(document.querySelectorAll('.pg'),function(p){p.classList.toggle('on',p.id==='p-'+t)});scrollTo(0,0)}
+[].forEach.call(document.querySelectorAll('.tabs button'),function(b){b.addEventListener('click',function(){go(b.dataset.t)})});
+/* news */
+var IMG='';
+function render(){
+  var l=S.items.map(function(n,i){return{n:n,i:i}}).sort(function(a,b){return String(b.n.date).localeCompare(String(a.n.date))});
+  $('#list').innerHTML=l.length?l.map(function(x){return'<div class="row"><small>'+esc(String(x.n.date).replace(/-/g,'.'))+'</small><div><span class="tg">'+esc(x.n.tag||'NEWS')+'</span>'+esc(x.n.title)+(x.n.titleEn?' <span class="mu">/ EN</span>':'')+(x.n.image?' <span class="mu">/ 写真あり</span>':'')+'</div><div><button class="b o s" data-o="'+x.i+'">記事を開く</button><button class="b o s" data-e="'+x.i+'">編集</button><button class="b o s" data-x="'+x.i+'">削除</button></div></div>'}).join(''):'<p class="mu">記事はまだありません。上のフォームから追加できます。</p>';
+}
+function siteUrl(){var c=cfg();if(!c.u||!c.r)return'';return c.r.toLowerCase()===(c.u+'.github.io').toLowerCase()?'https://'+c.u+'.github.io/':'https://'+c.u+'.github.io/'+c.r+'/'}
+function preview(){var t=$('#ti').value.trim();$('#pv').innerHTML=t?'<span class="d">'+esc($('#d').value.replace(/-/g,'.'))+'</span><span class="tg">'+esc($('#g').value)+'</span><b>'+esc(t)+'</b>'+(IMG?'<div class="mu" style="margin-top:6px">写真: あり</div>':'')+'<p>'+esc($('#bo').value)+'</p>'+($('#te').value.trim()?'<p style="border-top:1px dashed #ccc;padding-top:8px"><b>EN:</b> '+esc($('#te').value.trim())+'</p>':''):'<span class="mu">ここに、サイトでの見え方が出ます</span>'}
+['d','g','ti','te','bo','bo2'].forEach(function(k){$('#'+k).addEventListener('input',preview)});
+function showImg(src){$('#ipv').innerHTML=src?'<img src="'+esc(src)+'" style="max-width:220px;border-radius:8px;display:block;margin-top:8px"><button class="b o s" id="rmim" style="margin:8px 0 0">写真を外す</button>':''}
+function shrink(file){return new Promise(function(res,rej){var im=new Image(),u=URL.createObjectURL(file);im.onload=function(){var m=1400,s=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(function(b){b?res(b):rej(new Error('変換できませんでした'))},'image/jpeg',.85)};im.onerror=function(){rej(new Error('画像を読み込めませんでした'))};im.src=u})}
+function blob64(b){return new Promise(function(res){var r=new FileReader();r.onload=function(){res(String(r.result).split(',')[1])};r.readAsDataURL(b)})}
+function putRaw(c,p,b64,msg){return fetch(api(c,p),{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},hd(c)),body:JSON.stringify({message:msg,content:b64,branch:c.b})}).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.message||('HTTP '+r.status));return p})})}
+$('#im').addEventListener('change',function(){var f=this.files[0];if(!f)return;var c=cfg();if(!need(c)){this.value='';return}say('写真をアップロードしています…');
+  shrink(f).then(blob64).then(function(b){return putRaw(c,'images/news/'+Date.now()+'.jpg',b,'add news image')}).then(function(p){IMG=p;showImg(URL.createObjectURL(f));say('写真をアップロードしました','ok');preview()}).catch(function(e){say('写真のアップロードに失敗しました: '+e.message,'ng')})});
+$('#ipv').addEventListener('click',function(e){if(e.target.id==='rmim'){IMG='';showImg('');$('#im').value='';preview()}});
+$('#list').addEventListener('click',function(e){var t=e.target;
+  if(t.dataset.o!=null){var u=siteUrl();if(!u){say('先にユーザー名とリポジトリ名を入れてください','ng');return}window.open(u+'#news/'+encodeURIComponent(S.items[+t.dataset.o].id),'_blank')}
+  if(t.dataset.e!=null){var n=S.items[+t.dataset.e];S.edit=+t.dataset.e;$('#d').value=n.date;$('#g').value=n.tag||'NEWS';$('#ti').value=n.title||'';$('#te').value=n.titleEn||'';$('#bo').value=n.body||'';$('#bo2').value=n.bodyEn||'';IMG=n.image||'';showImg(IMG);$('#add').textContent='更新する';$('#cancel').style.display='inline-block';preview();scrollTo({top:0,behavior:'smooth'})}
+  if(t.dataset.x!=null&&confirm('この記事を削除しますか?(「公開する」を押すまで、サイトは変わりません)')){S.items.splice(+t.dataset.x,1);render();dirty(true);say('削除しました。「公開する」を押すとサイトに反映されます')}});
+function reset(){S.edit=-1;IMG='';['ti','te','bo','bo2'].forEach(function(k){$('#'+k).value=''});$('#im').value='';showImg('');$('#d').value=today();$('#add').textContent='追加する';$('#cancel').style.display='none';preview()}
+$('#cancel').addEventListener('click',reset);
+$('#add').addEventListener('click',function(){
+  var n={id:S.edit>=0&&S.items[S.edit].id?S.items[S.edit].id:String(Date.now()),date:$('#d').value,tag:$('#g').value,title:$('#ti').value.trim(),titleEn:$('#te').value.trim(),body:$('#bo').value.trim(),bodyEn:$('#bo2').value.trim()};
+  if(IMG)n.image=IMG;
+  if(!n.title||!n.date){say('日付とタイトルを入れてください','ng');return}
+  if(S.edit>=0)S.items[S.edit]=n;else S.items.push(n);
+  reset();render();dirty(true);say('追加しました。画面下の「公開する」を押すと、サイトに反映されます','ok')});
+/* bio */
+var BIODEF={intro:[
+{ja:'ソニーのプログラミング・ロボット学習キット「KOOV」を使って、あたぼうがプログラミングとロボット制作に挑戦するシリーズ。6歳で初めてブロックに触れた第1回から、8歳の第5回まで、その歩みを1本ずつ記録しています。',en:'A series in which Atabou takes on programming and robot building with Sony\'s KOOV learning kit. From the first episode at age 6, when he touched the blocks for the first time, to the fifth at age 8, each video records his steps.'},
+{ja:'ブロックで形を作り、プログラムでロボットを動かし、センサーと条件分岐でLEDを制御する。回を追うごとに、挑戦の内容が少しずつ本格的になっていきます。',en:'He builds with blocks, moves the robot with a program, and controls an LED with a sensor and a condition. With each episode, the challenge becomes a little more serious.'}],
+timeline:[
+{label:'2015.11.23',ja:'チャンネル開設(あたぼう5歳)',en:'Channel opened (Atabou, age 5)'},
+{label:'AGE 6',ja:'#1〜#3 KOOVに初挑戦。組み立てから、プログラムで動かすところまで',en:'#1-#3 First time with KOOV. From building to making it move with a program'},
+{label:'AGE 7',ja:'#4 より複雑な組み立てとプログラミングの課題へ',en:'#4 More complex building and programming challenges'},
+{label:'2019.10.22',ja:'#5 AGE 8。フォトリフレクターの数値を検証し、LEDを制御する',en:'#5 Age 8. Testing photo reflector values and controlling an LED'},
+{label:'AGE 15',ja:'新チャンネル「あたぼうチャンネル」を立ち上げ',en:'Started the new channel "Atabou Channel"'}]};
+S.bio=JSON.parse(JSON.stringify(BIODEF));S.bioSha=null;
+function bioRender(){
+  $('#bi-list').innerHTML=S.bio.intro.map(function(p,i){return'<div class="bx2"><label>段落 '+(i+1)+'(日本語)</label><textarea data-bi="'+i+'" data-k="ja">'+esc(p.ja)+'</textarea><label>英語(なくてもOK)</label><textarea data-bi="'+i+'" data-k="en">'+esc(p.en||'')+'</textarea><button class="b o s" data-bd="'+i+'" style="margin:8px 0 0">この段落を削除</button></div>'}).join('');
+  $('#tl-list').innerHTML=S.bio.timeline.map(function(r,i){return'<div class="bx2"><label>見出し(例: 2015.11.23 / AGE 6)</label><input data-ti="'+i+'" data-k="label" value="'+esc(r.label)+'"><label>内容(日本語)</label><input data-ti="'+i+'" data-k="ja" value="'+esc(r.ja)+'"><label>内容(英語・なくてもOK)</label><input data-ti="'+i+'" data-k="en" value="'+esc(r.en||'')+'"><div><button class="b o s" data-tu="'+i+'" style="margin:8px 6px 0 0">↑ 上へ</button><button class="b o s" data-td="'+i+'" style="margin:8px 6px 0 0">↓ 下へ</button><button class="b o s" data-tx="'+i+'" style="margin:8px 0 0">削除</button></div></div>'}).join('');
+}
+$('#p-bio').addEventListener('input',function(e){var t=e.target;if(t.dataset.bi!=null){S.bio.intro[+t.dataset.bi][t.dataset.k]=t.value;dirty(true)}if(t.dataset.ti!=null){S.bio.timeline[+t.dataset.ti][t.dataset.k]=t.value;dirty(true)}});
+$('#p-bio').addEventListener('click',function(e){var t=e.target,i,tl=S.bio.timeline;
+  if(t.dataset.bd!=null){if(confirm('この段落を削除しますか?')){S.bio.intro.splice(+t.dataset.bd,1);bioRender();dirty(true)}}
+  if(t.dataset.tx!=null){tl.splice(+t.dataset.tx,1);bioRender();dirty(true)}
+  if(t.dataset.tu!=null){i=+t.dataset.tu;if(i>0){var x=tl[i];tl[i]=tl[i-1];tl[i-1]=x;bioRender();dirty(true)}}
+  if(t.dataset.td!=null){i=+t.dataset.td;if(i<tl.length-1){var y=tl[i];tl[i]=tl[i+1];tl[i+1]=y;bioRender();dirty(true)}}});
+$('#bi-add').addEventListener('click',function(){S.bio.intro.push({ja:'',en:''});bioRender();dirty(true)});
+$('#tl-add').addEventListener('click',function(){S.bio.timeline.push({label:'',ja:'',en:''});bioRender();dirty(true)});
+$('#bio-save').addEventListener('click',function(){var c=cfg();if(!need(c))return;say('BIOを保存しています…');
+  ghPut(c,'bio.json',S.bio,S.bioSha,'update bio').then(function(sha){S.bioSha=sha;say('BIOを保存しました。1〜3分でサイトに反映されます','ok')}).catch(function(e){say('保存できませんでした: '+e.message,'ng')})});
+bioRender();
+/* connect */
+function loadAll(c){say('接続しています…');
+  return Promise.all([ghGet(c,c.p),ghGet(c,'config.json'),ghGet(c,'bio.json')]).then(function(rs){
+    var n=rs[0];S.items=n.missing?[]:(Array.isArray(n.data)?n.data:(n.data.news||[]));S.sha=n.missing?null:n.sha;
+    var y=rs[1];S.cfgSha=y.missing?null:y.sha;if(!y.missing&&y.data){$('#k').value=y.data.apiKey||'';if(y.data.h1)$('#h1').value=y.data.h1;if(y.data.h2)$('#h2').value=y.data.h2}
+    var bj=rs[2];S.bioSha=bj.missing?null:bj.sha;if(!bj.missing&&bj.data&&Array.isArray(bj.data.intro)&&Array.isArray(bj.data.timeline))S.bio=bj.data;bioRender();S.ok=true;dirty(false);render();say('接続OK。お知らせ '+S.items.length+' 件を読み込みました','ok');go('news')});}
+$('#test').addEventListener('click',function(){var c=cfg();if(!need(c))return;lsSet(c);loadAll(c).catch(function(e){S.ok=false;badge();say('接続できませんでした: '+e.message+'(「① 使い方」の「困ったとき」を見てください)','ng')})});
+$('#clr').addEventListener('click',function(){try{localStorage.removeItem('ap_admin')}catch(e){}['u','r','t'].forEach(function(k){$('#'+k).value=''});S.ok=false;badge();say('設定を消去しました')});
+$('#pub').addEventListener('click',function(){var c=cfg();if(!need(c))return;var bt=$('#pub');bt.disabled=true;say('公開しています…');
+  ghPut(c,c.p,{news:S.items},S.sha,'update news').then(function(sha){S.sha=sha;dirty(false);S.ok=true;badge();say('公開しました。1〜3分でサイトに反映されます','ok')}).catch(function(e){say('公開できませんでした: '+e.message,'ng')}).then(function(){bt.disabled=false})});
+$('#savey').addEventListener('click',function(){var c=cfg();if(!need(c))return;
+  var o={apiKey:$('#k').value.trim(),h1:$('#h1').value.trim()||'@あたぼうパパ',h2:$('#h2').value.trim()||'@あたぼう-r5y'};say('保存しています…');
+  ghPut(c,'config.json',o,S.cfgSha,'update config').then(function(sha){S.cfgSha=sha;say('YouTube連動の設定を保存しました。1〜3分で反映されます','ok')}).catch(function(e){say('保存できませんでした: '+e.message,'ng')})});
+$('#dl').addEventListener('click',function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({news:S.items},null,2)+'\n'],{type:'application/json'}));a.download='news.json';a.click()});
+$('#site').addEventListener('click',function(){var u=siteUrl();if(!u){say('先にユーザー名とリポジトリ名を入れてください','ng');return}window.open(u,'_blank')});
+addEventListener('beforeunload',function(e){if(S.dirty){e.preventDefault();e.returnValue=''}});
+render();preview();badge();
+if(c0.u&&c0.r&&c0.t){go('news');loadAll(cfg()).catch(function(){go('set');say('自動接続できませんでした。鍵や名前を確認して「接続テスト」を押してください','ng')})}
+})();
+</script>
+</body>
+</html>
